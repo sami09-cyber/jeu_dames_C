@@ -169,7 +169,7 @@ void afficherDamier(Damier *damier, Rafle *rafle) {
 
                         while(prises != NULL) {
                             if(i == prises->cases.ligne && j == prises->cases.colonne) {
-                                printf("\033[41m\033[37m X ");
+                                printf("\033[43m\033[37m X ");
                                 pionPris = 1;
                                 break;   
                             } 
@@ -209,7 +209,7 @@ void afficherDamier(Damier *damier, Rafle *rafle) {
 
                         while(prises != NULL) {
                             if(i == prises->cases.ligne && j == prises->cases.colonne) {
-                                printf("\033[41m\033[37m   ");
+                                printf("\033[44m\033[37m   ");
                                 pionPris = 1;
                                 break;   
                             } 

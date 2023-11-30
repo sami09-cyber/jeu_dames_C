@@ -5,8 +5,8 @@ Damier * creerDamier() {
 
     damier = (Damier *) malloc(sizeof(Damier));
 
-    damier->nombrePionBlanc = NOMBRE_PION_BLANC;
-    damier->nombrePionNoir = NOMBRE_PION_NOIR;
+    damier->nombrePionVert = NOMBRE_PION_VERT;
+    damier->nombrePionRouge = NOMBRE_PION_ROUGE;
 
     for(int i = 0; i < DIMENSION_PLATEAU; i++) {
         for(int j = 0; j < DIMENSION_PLATEAU; j++) {
@@ -35,6 +35,7 @@ Rafle * insererRafle(Rafle *rafle, Rafle *valeur) {
         return valeur;
     } else {
         valeur->suivante = rafle;
+        
         return valeur;
     }
 }

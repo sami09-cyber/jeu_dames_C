@@ -10,25 +10,31 @@ int main(int argc, char* argv[]) {
 
     damier = creerDamier();
 
-    rafle = insererRafle(rafle, creerRafle(3, 1));
-    rafle = insererRafle(rafle, creerRafle(2, 2));
-    rafle = insererRafle(rafle, creerRafle(1, 3));
-    rafle = insererRafle(rafle, creerRafle(2, 4));
-    rafle = insererRafle(rafle, creerRafle(7, 1));
-    rafle = insererRafle(rafle, creerRafle(6, 0));
-    rafle = insererRafle(rafle, creerRafle(6, 2));
-    rafle = insererRafle(rafle, creerRafle(5, 1));
-    rafle = insererRafle(rafle, creerRafle(5, 3));
+    // rafle = insererRafle(rafle, creerRafle(3, 1));
+    // rafle = insererRafle(rafle, creerRafle(2, 2));
+    // rafle = insererRafle(rafle, creerRafle(1, 3));
+    // rafle = insererRafle(rafle, creerRafle(2, 4));
+    // rafle = insererRafle(rafle, creerRafle(7, 1));
+    // rafle = insererRafle(rafle, creerRafle(6, 0));
+    // rafle = insererRafle(rafle, creerRafle(6, 2));
+    // rafle = insererRafle(rafle, creerRafle(5, 1));
+    // rafle = insererRafle(rafle, creerRafle(5, 3));
 
     initialiserDamier(damier);
+    rafle = trouverDeplacementPionPossible(damier, PION_ROUGE);
     afficherDamier(damier, rafle);
 
-    for(int i = 0; i < 10; i++) {
-        for(int j = 0; j < 10; j++) {
-            printf("%d\t", damier->plateau[i][j]);
-        }
-        printf("\n");
-    }
+    // while(rafle != NULL) {
+    //     printf("(%d, %d)\n", rafle->cases.ligne, rafle->cases.colonne);
+    //     rafle = rafle->suivante;
+    // }
+
+    // for(int i = 0; i < 10; i++) {
+    //     for(int j = 0; j < 10; j++) {
+    //         printf("%d\t", damier->plateau[i][j]);
+    //     }
+    //     printf("\n");
+    // }
 
     // do {
     //     afficherMenu();

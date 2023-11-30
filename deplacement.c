@@ -1,51 +1,26 @@
 #include "deplacement.h"
 
 
-int deplacerPion(Damier *damier, Deplacement deplacement, Rafle *rafle, int couleurPion) {
-    /*
-    -1: Le poin n'appartient pas au joeur
-    -2: Case vide
-    -3: Case occupee
-    -4: Mauvaise Ligne
-    -5: Mauvaise Colonne
-    -6: Prise impossible car le pion appartient au joeur
-    +1: deplacement possible
-    */ 
-
+void deplacerPion(Damier *damier, Deplacement deplacement, Rafle *rafle, int couleurPion) {
+    
     if(rafle == NULL) { // C'est un simple deplacement
-        if(damier[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] != couleurPion) { // Le poin n'appartient pas au joeur
-        return -1;
-        } if(damier[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] == CASE_VIDE){ // La case vide
-            return -2;
-        } else if(damier[deplacement.caseFinale.ligne][deplacement.caseFinale.colonne] != CASE_VIDE) { // La case occupee
-            return -3;
-        } else if(deplacement.caseInitiale.ligne - deplacement.caseFinale.ligne != 1) { // La ligne est mauvaise
-            return -4;
-        } else if(deplacement.caseInitiale.colonne - deplacement.caseFinale.colonne != 1) { // La colonne est mauvaise
-            return -5;
-        } else { // On peut effectuer un deplacement d'une case
-            damier->plateau[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] = CASE_VIDE;
-            damier->plateau[deplacement.caseFinale.ligne][deplacement.caseFinale.colonne] = couleurPion;
-        }
+        damier->plateau[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] = CASE_VIDE;
+        damier->plateau[deplacement.caseFinale.ligne][deplacement.caseFinale.colonne] = couleurPion;
     } else {
         Rafle *prises = rafle;
 
         while(prises != NULL) {
-            if(damier[prises->cases.ligne][prises->cases.colonne] != couleurPion) { // Le poin n'appartient pas au joeur : Prise possible
-                
-                if(verifierPrise(deplacement.caseInitiale, prises->cases) == 1) { // Prise avant
-                    damier->plateau[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] = CASE_VIDE;
-                    damier->plateau[deplacement.caseFinale.ligne - 2][deplacement.caseFinale.colonne + 2] = couleurPion;
-                } else if(verifierPrise(deplacement.caseInitiale, prises->cases) == 2) { // Prise Arriere
-                    damier->plateau[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] = CASE_VIDE;
-                    damier->plateau[deplacement.caseInitiale.ligne + 2][deplacement.caseInitiale.colonne - 2] = couleurPion;
-                }
-            } else { // Le poin appartient au joeur : Prise impossible
-                return -6;
+            damier->plateau[prises->cases.ligne][prises->cases.colonne] = CASE_VIDE;
+            
+            if(couleurPion == PION_VERT) {
+                damier->nombrePionVert -= 1; 
+            } else {
+                damier->nombrePionRouge -= 1; 
             }
-            deplacerPion();
             prises = prises->suivante;
         }
+        damier->plateau[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] = CASE_VIDE;
+        damier->plateau[deplacement.caseFinale.ligne][deplacement.caseFinale.colonne] = couleurPion;
    }    
 }
 
@@ -68,3 +43,82 @@ int verifierPrise(Case caseInitiale, Case casePrise) {
         return 0;
     }
 }
+
+void promouvoirPion(Damier *damier, Case cases, int couleurPion) {
+    if(couleurPion == PION_VERT) {
+        damier->plateau[cases.ligne][cases.colonne] = 2*PION_VERT;
+    } else {
+        damier->plateau[cases.ligne][cases.colonne] = 2*PION_ROUGE;
+    }
+}
+
+void deplacerDame(Damier *damier, Deplacement deplacement, int couleurDame) {
+    
+    damier->plateau[deplacement.caseInitiale.ligne][deplacement.caseInitiale.colonne] = CASE_VIDE;
+    damier->plateau[deplacement.caseFinale.ligne][deplacement.caseFinale.colonne] = couleurDame;
+}
+/*
+    -1 : On ne pas enjambe son propre pion
+*/ 
+// int verifierDeplacementDame(Damier *damier, Deplacement deplacement, int couleurDame) {
+//     for(int i = deplacement.caseInitiale.ligne; i < deplacement.caseFinale.ligne; i++) {
+//         for(int j = deplacement.caseInitiale.colonne; j < deplacement.caseFinale.colonne; j++) {
+//             if((i + j) % 2 == 0) { // Selection des cases blanches
+//                 if(deplacement.caseInitiale.ligne < deplacement.caseFinale.ligne) {
+//                 if(deplacement.caseInitiale.colonne < deplacement.caseFinale.colonne) {
+//                     if(damier->plateau[i + 1][j + 1] == couleurDame/2) {
+//                         return -1;
+//                     }
+//                 } else {
+//                     if(damier->plateau[i + 1][j - 1] == couleurDame/2) {
+//                         return -1;
+//                     }
+//                 }
+//             } else {
+//                 if(deplacement.caseInitiale.colonne < deplacement.caseFinale.colonne) {
+//                     if(damier->plateau[i + 1][j + 1] == couleurDame/2) {
+//                         return -1;
+//                     }
+//                 } else {
+//                     if(damier->plateau[i + 1][j - 1] == couleurDame/2) {
+//                         return -1;
+//                     }
+//                 }
+//             }
+//             }
+
+            
+//         }
+//     }
+// }
+
+int verifierCaseValide(int ligne, int colonne) { // La case doit etre comprise entre 0 et la dimension du plateau - 1
+    return (ligne >= 0 && ligne < DIMENSION_PLATEAU) && (colonne >= 0 && colonne < DIMENSION_PLATEAU);
+}
+
+Rafle * trouverDeplacementPionPossible(Damier *damier, int couleurPion) {
+    Rafle *rafle = NULL;
+
+    for (int i = 0; i < DIMENSION_PLATEAU; i++) {
+        for (int j = 0; j < DIMENSION_PLATEAU; j++) {
+            if((i + j) % 2 == 0) { // Selection des cases blanches
+                if((damier->plateau[i][j] == PION_VERT) && (couleurPion == PION_VERT)) { // Selection des pions Verts
+                    if(verifierCaseValide(i + 1, j - 1) && damier->plateau[i + 1][j - 1] == CASE_VIDE) { // Deplacement a gauche possible
+                        rafle = insererRafle(rafle, creerRafle(i + 1, j - 1));
+                    } else if(verifierCaseValide(i + 1, j + 1) && damier->plateau[i + 1][j + 1] == CASE_VIDE) { // Deplacement a droite possible
+                        rafle = insererRafle(rafle, creerRafle(i + 1, j + 1));
+                    }
+                } else if((damier->plateau[i][j] == PION_ROUGE) && (couleurPion == PION_ROUGE)) { // Selection des pions Rouges
+                    if(verifierCaseValide(i - 1, j + 1) && damier->plateau[i - 1][j + 1] == CASE_VIDE) { // Deplacement a gauche possible
+                        rafle = insererRafle(rafle, creerRafle(i - 1, j + 1));
+                    } else if(verifierCaseValide(i - 1, j - 1) && damier->plateau[i - 1][j - 1] == CASE_VIDE) { // Deplacement a droite possible
+                        rafle = insererRafle(rafle, creerRafle(i - 1, j - 1));
+                    }
+                }
+            }
+        }
+    }
+
+    return rafle;
+}
+

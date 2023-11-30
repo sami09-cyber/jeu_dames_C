@@ -6,12 +6,18 @@
 #endif  // Fin du garde d'inclusion
 
 /* Deplacement d'un pion */
-int deplacerPion(Damier *damier, Deplacement deplacement, Rafle *rafle, int couleurPion);
+void deplacerPion(Damier *damier, Deplacement deplacement, Rafle *rafle, int couleurPion);
 
 int verifierPrise(Case caseInitiale, Case casePrise);
 
+int verifierCaseValide(int ligne, int colonne);
+
 /* Promouvoie un pion en dame */ 
-void promouvoirPion(Damier *damier, int couleur);
+void promouvoirPion(Damier *damier, Case cases, int couleurPion);
 
 /* Deplacement d'un dame */ 
-void deplacerDame(Damier *damier, Deplacement deplacement, Case prise, int couleur, int pion);
+void deplacerDame(Damier *damier, Deplacement deplacement, int couleurDame);
+
+Rafle * trouverDeplacementPionPossible(Damier *damier, int couleurPion);
+
+void trouverDeplacementDamePossible();
