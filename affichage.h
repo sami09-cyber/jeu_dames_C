@@ -2,6 +2,7 @@
     #define STRUCTURE_H   // On definit STRUCTURE_H pour éviter les inclusions multiples
 
     #include "structure.h"  // Contenu du fichier d'en-tete
+    #include "deplacement.h"
 
 #endif  // Fin du garde d'inclusion
 
@@ -28,6 +29,13 @@ void initialiserDamier(Damier *damier);
 
 void afficherDamier(Damier *damier, Rafle *rafle);
 
+void nouvellePartie(Damier *damier);
+
+void choisirOptions(int *option);
+
+Deplacement afficherTourJoueur(Joueur joueur, Rafle *rafle);
+
+void jouerPartie(Damier *damier, Joueur joueur1, Joueur joueur2, int quitter);
 // afficherCoup
 // chargerPartie
 // quitterJeu

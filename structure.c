@@ -29,23 +29,46 @@ Rafle * creerRafle(int ligne, int colonne) {
     return rafle;
 }
 
+Rafle * rechercherRafle(Rafle *rafle, int ligne, int colonne) {
+    if(rafle == NULL) {
+        return NULL;
+    } else {
+        Rafle *p = rafle;
+        while(p != NULL) {
+            if(p->cases.ligne == ligne && p->cases.colonne == colonne) {
+                return p;
+            }
+            p = p->suivante;
+        }
+
+        return p;
+    }
+}
+
 Rafle * insererRafle(Rafle *rafle, Rafle *valeur) {
     
     if(rafle == NULL) {
         return valeur;
     } else {
-        valeur->suivante = rafle;
+        Rafle *p = rechercherRafle(rafle, valeur->cases.ligne, valeur->cases.colonne);
+
+        if(p == NULL) {
+            valeur->suivante = rafle;
         
-        return valeur;
+            return valeur;
+        }else {
+            return rafle;
+        }
     }
 }
+
 
 Rafle * supprimerRafle(Rafle *rafle, int position) {
     int pos = 1;
     Rafle *last = NULL, *p = NULL;
 
     if(rafle == NULL) {
-        printf("La rafle est vide");
+        printf("\nLa rafle est vide\n");
     } else if(position == pos) {
         p = rafle;
         rafle = rafle->suivante;

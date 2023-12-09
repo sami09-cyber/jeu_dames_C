@@ -3,10 +3,10 @@
 
 
 int main(int argc, char* argv[]) {
-    // int choix, option, typeJoeur;
+    int choix, option;
 
     Damier *damier = NULL;
-    Rafle *rafle = NULL;
+    // Rafle *rafle = NULL;
 
     damier = creerDamier();
 
@@ -20,9 +20,9 @@ int main(int argc, char* argv[]) {
     // rafle = insererRafle(rafle, creerRafle(5, 1));
     // rafle = insererRafle(rafle, creerRafle(5, 3));
 
-    initialiserDamier(damier);
-    rafle = trouverDeplacementPionPossible(damier, PION_ROUGE);
-    afficherDamier(damier, rafle);
+    // initialiserDamier(damier);
+    // rafle = trouverDeplacementsEtRaflesPossiblesPions(damier, PION_VERT, 1);
+    // afficherDamier(damier, rafle);
 
     // while(rafle != NULL) {
     //     printf("(%d, %d)\n", rafle->cases.ligne, rafle->cases.colonne);
@@ -36,70 +36,38 @@ int main(int argc, char* argv[]) {
     //     printf("\n");
     // }
 
-    // do {
-    //     afficherMenu();
-    //     printf("Entrez votre choix (1-4): \t");
-    //     scanf("%d", &choix);
+    do {
+        afficherMenu();
+        printf("Entrez votre choix (1-4): \t");
+        scanf("%d", &choix);
 
-    //     switch (choix) {
-    //         case 1: // Nouvelle partie
-    //             printf("\nLancer une nouvelle partie...\n");
+        switch (choix) {
+            case 1: // Nouvelle partie
+                nouvellePartie(damier);
+            break;
+            case 2: // Partie existante
+                system("clear");
+                printf("\nCharger une partie existante...\n");
+                // Appel à la fonction pour charger une partie
+            break;
+            case 3: // Les options
+                system("clear");
+                choisirOptions(&option);
+            break;
+            case 4: // L'aide
+                system("clear");
+                afficherAide();
+            break;
+            case 0: // Arreter le jeu
+                system("cls");
+                printf("\nQuitter le jeu de dames. Au revoir!\n");
+            break;
+            default:
+                printf("\nChoix invalide. Veuillez entrer un nombre entre 1 et 4.\n");
+            break;
+        }
 
-    //             do {
-    //                 afficherTypeJoeur();
-    //                 printf("Entrez le numéro du type de joueur : ");
-    //                 scanf("%d", &typeJoeur);
-
-    //                 switch (typeJoeur) {
-    //                     case 1: // Humain VS Machine
-    //                         Joueur humain, machine;
-    //                         enregistrerJoeur(1, humain, machine);
-    //                         initialiserDamier(damier);
-    //                         afficherDamier(damier);
-    //                     break;
-    //                     case 2: // Humain VS Humain
-    //                         Joueur humain1, humain2;
-    //                         enregistrerJoeur(1, humain1, humain2);
-    //                         initialiserDamier(damier);
-    //                         afficherDamier(damier);
-    //                     break;
-    //                     case 3:
-    //                         printf("Retour au menu principal!\n");
-    //                     break;
-    //                     case 0:
-    //                         choix = 0;
-    //                         printf("Quitter le jeu de dames. Au revoir!\n");
-    //                     break;
-    //                     default:
-    //                         printf("Choix invalide. Veuillez entrer un nombre entre 1 et 2.\n");
-    //                     break;
-    //                 }
-
-    //             } while(typeJoeur != 3 && typeJoeur != 0);
-    //         break;
-    //         case 2: // Partie existante
-    //             printf("\nCharger une partie existante...\n");
-    //             // Appel à la fonction pour charger une partie
-    //         break;
-    //         case 3: // Les options
-    //             do {
-    //                 afficherOptions();
-    //                 printf("Entrez le numéro de l'option : \n");
-    //                 scanf("%d", &option);
-    //             } while(option != 1 && option != 2 && option != 3);
-    //         break;
-    //         case 4: // L'aide
-    //             afficherAide();
-    //         break;
-    //         case 0: // Arreter le jeu
-    //             printf("\nQuitter le jeu de dames. Au revoir!\n");
-    //         break;
-    //         default:
-    //             printf("\nChoix invalide. Veuillez entrer un nombre entre 1 et 4.\n");
-    //         break;
-    //     }
-
-    // } while (choix != 0);
+    } while (choix != 0);
 
     return 0;
 }

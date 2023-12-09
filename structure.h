@@ -42,6 +42,7 @@ typedef struct JOUEUR {
     char email[25];
     int type;
     int couleur;
+    int tour;
 } Joueur;
 
 /* Representation du damier: Le damier est le plateau contenant les pions */ 
@@ -55,6 +56,8 @@ typedef struct DAMIER {
 Damier * creerDamier();
 
 Rafle * creerRafle(int ligne, int colonne);
+
+Rafle * rechercherRafle(Rafle *rafle, int ligne, int colonne);
 
 Rafle * insererRafle(Rafle *rafle, Rafle *c);
 
