@@ -59,6 +59,12 @@ Rafle * creerRafle(int ligne, int colonne);
 
 Rafle * rechercherRafle(Rafle *rafle, int ligne, int colonne);
 
+Rafle * supprimerRafleDoublons(Rafle *rafle);  
+
+Rafle * rechercherRafleParIndice(Rafle *rafle, int indice);
+
 Rafle * insererRafle(Rafle *rafle, Rafle *c);
 
 Rafle * supprimerRafle(Rafle *rafle, int position);
+
+int longueurRafle(Rafle *rafle);

@@ -25,51 +25,74 @@ void afficherTypeJoeur() {
     printf("0. Quitter\n");
 }
 
-Deplacement afficherTourJoueur(Joueur joueur, Rafle *rafle) {
+Deplacement afficherTourJoueur(Damier *damier, Joueur joueur, Rafle *pions, Rafle *rafle) {
     int ligneInitiale, colonneInitiale;
     int ligneFinale, colonneFinale;
-    int x = 0;
+    int x;
     Deplacement deplacement;
 
-    printf("====== Tour de %s ======\n", joueur.surnom);
+    if(joueur.type == CPU) {
+        Rafle *initiale, *finale, *deplacementsPossiblesPions;
 
-    do {
-        printf("Entrer la ligne initiale:\t");
-        scanf("%d", &ligneInitiale);
-        printf("\nEntrer la colonne initiale:\t");
-        scanf("%d", &colonneInitiale);
-
-        if(verifierCaseVide(ligneInitiale, colonneInitiale)) {
-            printf("\nLa case est vide.Reessayer\n"); 
-            x = 1;
-        } else if(!verifierCaseValide(ligneInitiale, colonneInitiale)) {
-            printf("\nLa case n'est pas valide.Reessayer\n"); 
-            x = 1;
-        } else if(rechercherRafle(rafle, ligneFinale, colonneFinale) == NULL) {
-            printf("Deplacement incorrect");
-            x = 1;
-        }
-    } while(x == 0);
-
-    do {
-        printf("\nEntrer la ligne finale:\t");
-        scanf("%d", &ligneFinale);
-        printf("\nEntrer la colonne finale:\t");
-        scanf("%d", &colonneFinale);
-
-        if(verifierCaseValide(ligneFinale, colonneFinale)) {
-            printf("\nLa case est vide.Reessayer\n"); 
-            x = 2;
-        } else if(!verifierCaseValide(ligneFinale, colonneFinale)) {
-            printf("\nLa case n'est pas valide.Reessayer\n"); 
-            x = 2;
-        } else if(rechercherRafle(rafle, ligneFinale, colonneFinale) == NULL) {
-            printf("Deplacements incorrectes");
-            x = 2;
+        if(longueurRafle(pions) != 0) {
+            initiale = rechercherRafleParIndice(pions, genererNombre(1, longueurRafle(pions)));
         }
 
+        deplacementsPossiblesPions = deplacementEtRaflePossiblesPion(damier, initiale->cases.ligne, initiale->cases.colonne, joueur.couleur, 1);
 
-    } while(x == 1);
+        if(longueurRafle(deplacementsPossiblesPions) != 0) {
+            finale = rechercherRafleParIndice(deplacementsPossiblesPions, genererNombre(1, longueurRafle(deplacementsPossiblesPions)));
+        }
+        
+        deplacement.caseInitiale.ligne = initiale->cases.ligne;
+        deplacement.caseInitiale.colonne = initiale->cases.colonne;
+        deplacement.caseFinale.ligne = finale->cases.ligne;
+        deplacement.caseFinale.colonne = finale->cases.colonne;
+
+        return deplacement;
+    } else {
+        printf("====== Tour de %s ======\n", joueur.surnom);
+
+        do {
+            printf("Entrer la ligne initiale: ");
+            scanf("%d", &ligneInitiale);
+            printf("\nEntrer la colonne initiale: ");
+            scanf("%d", &colonneInitiale);
+
+            if(verifierCaseVide(damier, ligneInitiale, colonneInitiale)) {
+                printf("\nLa case est vide.Reessayer\n"); 
+                x = 1;
+            } else if(!verifierCaseValide(ligneInitiale, colonneInitiale)) {
+                printf("\nLa case n'est pas valide.Reessayer\n"); 
+                x = 1;
+            } else if(rechercherRafle(rafle, ligneFinale, colonneFinale) != NULL) {
+                printf("Deplacement incorrect");
+                x = 1;
+            } else {
+                x = 0;
+            }
+        } while(x != 0);
+
+        do {
+            printf("\nEntrer la ligne finale: ");
+            scanf("%d", &ligneFinale);
+            printf("\nEntrer la colonne finale: ");
+            scanf("%d", &colonneFinale);
+
+            if(!verifierCaseValide(ligneFinale, colonneFinale)) {
+                printf("\nLa case n'est pas vide.Reessayer\n"); 
+                x = 2;
+            } else if(!verifierCaseValide(ligneFinale, colonneFinale)) {
+                printf("\nLa case n'est pas valide.Reessayer\n"); 
+                x = 2;
+            } else if(rechercherRafle(rafle, ligneFinale, colonneFinale) == NULL) {
+                printf("Deplacements incorrectes");
+                x = 2;
+            } else {
+                x = 0;
+            }
+        } while(x != 0);
+    }
 
     deplacement.caseInitiale.ligne = ligneInitiale;
     deplacement.caseInitiale.colonne = colonneInitiale;
@@ -113,59 +136,64 @@ void viderBuffer() {
     }
 }
 
-void enregistrerJoeur(int typeJoeur, Joueur joueur1, Joueur joueur2) {
+void enregistrerJoeur(int typeJoeur, Joueur *joueur1, Joueur *joueur2) {
     system("clear");
+    viderBuffer();
     switch (typeJoeur) {
         case 1:
             // Enregistrement du Joueur Humain
             printf("====== Enregistrement du Joueur ======\n");
-            printf("Surnom: \t");
-            lire(joueur1.surnom, 25);
-            printf("\nNom: \t");
-            lire(joueur1.nom, 25);
-            printf("\nPrenom: \t");
-            lire(joueur1.prenom, 25);
-            printf("\nEmail: \t");
-            lire(joueur1.email, 25);
-            joueur1.type = HUMAIN;
-            joueur1.tour = 0;
+            printf("Surnom: ");
+            lire(joueur1->surnom, 25);
+            printf("\nNom: ");
+            lire(joueur1->nom, 25);
+            printf("\nPrenom: ");
+            lire(joueur1->prenom, 25);
+            printf("\nEmail: ");
+            lire(joueur1->email, 25);
+            joueur1->type = HUMAIN;
+            joueur1->tour = 0;
+            joueur1->couleur = PION_VERT;
 
             // Enregistrement du Joueur Machine
             char cpu[30];
             snprintf(cpu, sizeof(cpu), "%s_%d", "CPU", genererNombre(1, 100)); // concatene une chaine avec un nombre
-            strcpy(joueur2.surnom, cpu);
-            strcpy(joueur2.nom, cpu);
-            strcpy(joueur2.prenom, cpu);
-            strcpy(joueur2.email, cpu);
-            joueur2.type = CPU;
-            joueur2.tour = 0;
+            strcpy(joueur2->surnom, cpu);
+            strcpy(joueur2->nom, cpu);
+            strcpy(joueur2->prenom, cpu);
+            strcpy(joueur2->email, cpu);
+            joueur2->type = CPU;
+            joueur2->tour = 0;
+            joueur2->couleur = PION_ROUGE;
         break; 
         case 2: 
             // Enregistrement du Joueur Humain 1
             printf("====== Enregistrement du Joueur 1 ======\n");
-            printf("Surnom: \t");
-            lire(joueur1.surnom, 25);
-            printf("\nNom: \t");
-            lire(joueur1.nom, 25);
-            printf("\nPrenom: \t");
-            lire(joueur1.prenom, 25);
-            printf("\nEmail: \t");
-            lire(joueur1.email, 25);
-            joueur1.type = HUMAIN;
-            joueur1.tour = 0;
+            printf("Surnom: ");
+            lire(joueur1->surnom, 25);
+            printf("\nNom: ");
+            lire(joueur1->nom, 25);
+            printf("\nPrenom: ");
+            lire(joueur1->prenom, 25);
+            printf("\nEmail: ");
+            lire(joueur1->email, 25);
+            joueur1->type = HUMAIN;
+            joueur1->tour = 0;
+            joueur1->couleur = PION_VERT;
 
             // Enregistrement du Joueur Humain 2
             printf("====== Enregistrement du Joueur 2 ======\n");
-            printf("Surnom: \t");
-            lire(joueur2.surnom, 25);
-            printf("\nNom: \t");
-            lire(joueur2.nom, 25);
-            printf("\nPrenom: \t");
-            lire(joueur2.prenom, 25);
-            printf("\nEmail: \t");
-            lire(joueur2.email, 25);
-            joueur2.type = HUMAIN;
-            joueur2.tour = 0;
+            printf("Surnom: ");
+            lire(joueur2->surnom, 25);
+            printf("\nNom: ");
+            lire(joueur2->nom, 25);
+            printf("\nPrenom: ");
+            lire(joueur2->prenom, 25);
+            printf("\nEmail: ");
+            lire(joueur2->email, 25);
+            joueur2->type = HUMAIN;
+            joueur2->tour = 0;
+            joueur2->couleur = PION_ROUGE;
         break;
     }
 }
@@ -182,7 +210,7 @@ int genererNombre(int minimum, int maximum) {
 }
 
 void afficherAide() {
-    system("cls");
+    system("clear");
     printf("\n====== Aide du Jeu de Dames ======\n");
     printf("Le jeu de dames est un jeu de plateau pour deux joueurs.\n");
 
@@ -289,7 +317,7 @@ void afficherDamier(Damier *damier, Rafle *rafle) {
     printf("\t\t   0  1  2  3  4  5  6  7  8  9\n");
 }
 
-void nouvellePartie(Damier *damier) {
+void nouvellePartie(Damier *damier, int option) {
     int choix, typeJoeur;
 
     system("clear");
@@ -303,13 +331,14 @@ void nouvellePartie(Damier *damier) {
         switch (typeJoeur) {
             case 1: // Humain VS Machine
                 Joueur humain, machine;
-                enregistrerJoeur(1, humain, machine);
+                enregistrerJoeur(1, &humain, &machine);
                 humain.tour = 1;
+                printf("\nC:%d\n", humain.couleur);
                 jouerPartie(damier, humain, machine, choix);
             break;
             case 2: // Humain VS Humain
                 Joueur humain1, humain2;
-                enregistrerJoeur(2, humain1, humain2);
+                enregistrerJoeur(2, &humain1, &humain2);
                 humain1.tour = 1;
                 jouerPartie(damier, humain1, humain2, choix);
             break;
@@ -329,6 +358,7 @@ void nouvellePartie(Damier *damier) {
 }
 
 void choisirOptions(int *option) {
+    system("clear");
     do {
         afficherOptions();
         printf("Entrez le numéro de l'option : \n");
@@ -338,7 +368,7 @@ void choisirOptions(int *option) {
 
 
 void jouerPartie(Damier *damier, Joueur joueur1, Joueur joueur2, int quitter) {
-    Rafle *deplacementPossible = NULL, *raflePossible = NULL;
+    Rafle *deplacementPossible = NULL, *pionsDeplacables = NULL, *raflePossible = NULL;
     Deplacement deplacementJoeur;
 
     system("clear");
@@ -348,31 +378,37 @@ void jouerPartie(Damier *damier, Joueur joueur1, Joueur joueur2, int quitter) {
         if(joueur1.tour) {
             deplacementPossible = trouverDeplacementsEtRaflesPossiblesPions(damier, joueur1.couleur, 1);
             raflePossible = trouverDeplacementsEtRaflesPossiblesPions(damier, joueur1.couleur, 2);
+            pionsDeplacables = trouverDeplacementsEtRaflesPossiblesPions(damier, joueur1.couleur, 3);
 
             if(raflePossible == NULL) {
                 afficherDamier(damier, deplacementPossible);
-                deplacementJoeur = afficherTourJoueur(joueur1, deplacementPossible);
+                deplacementJoeur = afficherTourJoueur(damier, joueur1, pionsDeplacables, deplacementPossible);
             } else {
                 afficherDamier(damier, raflePossible);
-                deplacementJoeur = afficherTourJoueur(joueur1, raflePossible);
+                deplacementJoeur = afficherTourJoueur(damier, joueur1, pionsDeplacables, raflePossible);
             }
 
             deplacerPion(damier, deplacementJoeur, raflePossible, joueur1.couleur);
             joueur1.tour = 0;
+            joueur2.tour = 1;
         } else if(joueur2.tour) {
             deplacementPossible = trouverDeplacementsEtRaflesPossiblesPions(damier, joueur2.couleur, 1);
             raflePossible = trouverDeplacementsEtRaflesPossiblesPions(damier, joueur2.couleur, 2);
+            pionsDeplacables = trouverDeplacementsEtRaflesPossiblesPions(damier, joueur1.couleur, 3);
 
             if(raflePossible == NULL) {
                 afficherDamier(damier, deplacementPossible);
-                deplacementJoeur = afficherTourJoueur(joueur2, deplacementPossible);
+                deplacementJoeur = afficherTourJoueur(damier, joueur2, pionsDeplacables, deplacementPossible);
             } else {
                 afficherDamier(damier, raflePossible);
-                deplacementJoeur = afficherTourJoueur(joueur2, raflePossible);
+                deplacementJoeur = afficherTourJoueur(damier, joueur2, pionsDeplacables, raflePossible);
             }
 
+            printf("\n\n(%d:%d)\n\n", deplacementJoeur.caseInitiale.ligne, deplacementJoeur.caseInitiale.colonne);
+            printf("\n\n(%d:%d)\n\n", deplacementJoeur.caseFinale.ligne, deplacementJoeur.caseFinale.colonne);
             deplacerPion(damier, deplacementJoeur, raflePossible, joueur2.couleur);
             joueur2.tour = 0;
+            joueur1.tour = 1;
         }
     }
     

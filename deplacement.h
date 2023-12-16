@@ -26,6 +26,8 @@ int verifierDeplacementDame(Damier *damier, Deplacement deplacement, int couleur
 
 Rafle * trouverDeplacementsEtRaflesPossiblesPions(Damier *damier, int couleurPion, int choix);
 
+Rafle * deplacementEtRaflePossiblesPion(Damier *damier, int ligne, int colonne, int couleurPion, int choix);
+
 Rafle * trouverDeplacementsEtRaflesPossiblesDames(Damier *damier, int couleurPion, int choix);
 
 int verifierFinPartie(Damier *damier, Joueur joueur, int quitter);

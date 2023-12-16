@@ -34,33 +34,99 @@ Rafle * rechercherRafle(Rafle *rafle, int ligne, int colonne) {
         return NULL;
     } else {
         Rafle *p = rafle;
+
         while(p != NULL) {
             if(p->cases.ligne == ligne && p->cases.colonne == colonne) {
                 return p;
             }
             p = p->suivante;
         }
-
-        return p;
+        return NULL;
     }
 }
+
+Rafle * rechercherRafleParIndice(Rafle *rafle, int indice) {
+    int position = 1;
+
+    if(rafle == NULL) {
+        return NULL;
+    } else {
+        Rafle *p = rafle;
+
+        while(p != NULL) {
+            if(position == indice) {
+                p->suivante = NULL;
+                return p;
+            }
+            position += 1;
+            p = p->suivante;
+        }
+        
+        return NULL;
+    }
+}
+
 
 Rafle * insererRafle(Rafle *rafle, Rafle *valeur) {
     
     if(rafle == NULL) {
         return valeur;
-    } else {
-        Rafle *p = rechercherRafle(rafle, valeur->cases.ligne, valeur->cases.colonne);
+    } else if(valeur == NULL) {
+        return rafle;
+    } else {  
+        Rafle *p = rafle;
 
-        if(p == NULL) {
-            valeur->suivante = rafle;
-        
-            return valeur;
-        }else {
-            return rafle;
+        while(p->suivante != NULL) {
+            p = p->suivante;
         }
+        p->suivante = valeur;
+
+        return supprimerRafleDoublons(rafle);
     }
 }
+
+// Rafle * supprimerRafleDoublons(Rafle *rafle) {
+//     Rafle *p = rafle;
+
+//     while(p->suivante != NULL) {
+//         Rafle *t = p->suivante;
+
+//         if(rechercherRafle(rafle, t->cases.ligne, t->cases.colonne) == NULL) {
+//             p = p->suivante;
+//         } else {
+//             Rafle *temp = t;
+//             t = t->suivante;
+//             free(temp);
+//         }
+//     }
+
+//     return rafle;
+// } 
+
+Rafle *supprimerRafleDoublons(Rafle *rafle) {
+    Rafle *courant = rafle, *precedent = NULL;
+
+    while(courant != NULL) {
+        Rafle *suivant = courant->suivante;
+
+        if (rechercherRafle(suivant, courant->cases.ligne, courant->cases.colonne) != NULL) { // Vérifier si l'élément courant est un doublon
+            if (precedent == NULL) { // Si le doublon est en tête de liste
+                rafle = suivant;
+            } else {
+                precedent->suivante = suivant;
+            }
+
+            free(courant);
+        } else {
+            precedent = courant;
+        }
+
+        courant = suivant;
+    }
+
+    return rafle;
+}
+
 
 
 Rafle * supprimerRafle(Rafle *rafle, int position) {
@@ -89,3 +155,21 @@ Rafle * supprimerRafle(Rafle *rafle, int position) {
 
     return rafle;
 }
+
+int longueurRafle(Rafle *rafle) {
+    int longueur = 0;
+
+    if(rafle == NULL) {
+        return 0;
+    } else {
+        Rafle *p = rafle;
+
+        while(p != NULL) {
+            longueur += 1;
+            p = p->suivante;
+        }
+
+        return longueur;
+    }
+}
+

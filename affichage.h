@@ -15,7 +15,7 @@ void afficherAide();
 
 void afficherTypeJoeur();
 
-void enregistrerJoeur(int typeJoeur, Joueur joueur1, Joueur joueur2);
+void enregistrerJoeur(int typeJoeur, Joueur *joueur1, Joueur *joueur2);
 
 int genererNombre(int minimum, int maximum);
 
@@ -29,11 +29,11 @@ void initialiserDamier(Damier *damier);
 
 void afficherDamier(Damier *damier, Rafle *rafle);
 
-void nouvellePartie(Damier *damier);
+void nouvellePartie(Damier *damier, int option);
 
 void choisirOptions(int *option);
 
-Deplacement afficherTourJoueur(Joueur joueur, Rafle *rafle);
+Deplacement afficherTourJoueur(Damier *damier, Joueur joueur, Rafle *pions, Rafle *rafle);
 
 void jouerPartie(Damier *damier, Joueur joueur1, Joueur joueur2, int quitter);
 // afficherCoup
