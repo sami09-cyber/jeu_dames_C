@@ -33,9 +33,13 @@ void nouvellePartie(Damier *damier, int option);
 
 void choisirOptions(int *option);
 
-Deplacement afficherTourJoueur(Damier *damier, Joueur joueur, Rafle *pions, Rafle *rafle);
+Deplacement afficherTourJoueur(Damier *damier, Joueur joueur, Rafle *deplacementPossible, Rafle *raflePossible, Rafle *pionDeplacement, Rafle *pionRafle, Rafle *deplacementRafle, int option);
 
-void jouerPartie(Damier *damier, Joueur joueur1, Joueur joueur2, int quitter);
+Deplacement jouerCPU(Damier *damier, Joueur joueur, Rafle *pionDeplacement, Rafle *raflePossible, Rafle *pionRafle, Rafle *deplacementRafle, int option);
+
+Deplacement jouerHumain(Damier *damier, Joueur joueur, Rafle *deplacementPossible, Rafle *pionDeplacement, Rafle *raflePossible, Rafle *pionRafle, Rafle *deplacementRafle);
+
+void jouerPartie(Damier *damier, Joueur joueur1, Joueur joueur2,  int option, int quitter);
 // afficherCoup
 // chargerPartie
 // quitterJeu

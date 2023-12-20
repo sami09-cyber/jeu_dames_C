@@ -204,47 +204,55 @@ Rafle * trouverDeplacementsEtRaflesPossiblesPions(Damier *damier, int couleurPio
 
 
 Rafle * deplacementEtRaflePossiblesPion(Damier *damier, int ligne, int colonne, int couleurPion, int choix) {
-    Rafle *deplacement = NULL, *rafle = NULL, *pion = NULL;
+    Rafle *deplacement = NULL, *rafle = NULL, *pionDeplacement = NULL, *pionRafle = NULL, *deplacementRafle = NULL;
 
     if((damier->plateau[ligne][colonne] == PION_VERT) && (couleurPion == PION_VERT)) { // Selection des pions Verts
         if(verifierCaseValide(ligne + 1, colonne - 1)) { // Deplacement a gauche possible
             if(damier->plateau[ligne + 1][colonne - 1] == CASE_VIDE) {
-                pion = insererRafle(pion, creerRafle(ligne, colonne));
+                pionDeplacement = insererRafle(pionDeplacement, creerRafle(ligne, colonne));
                 deplacement = insererRafle(deplacement, creerRafle(ligne + 1, colonne - 1));
             } else if((damier->plateau[ligne + 1][colonne - 1] == PION_ROUGE) && verifierCaseValide(ligne + 2, colonne - 2) && damier->plateau[ligne + 2][colonne - 2] == CASE_VIDE) { // Selection des rafles des Pions rouges a gauche
+                pionRafle = insererRafle(pionRafle, creerRafle(ligne, colonne));
                 rafle = insererRafle(rafle, creerRafle(ligne + 1, colonne - 1));
+                deplacementRafle = insererRafle(deplacementRafle, creerRafle(ligne + 2, colonne - 2));
             }
         }
 
         if(verifierCaseValide(ligne + 1, colonne + 1)) { // Deplacement a droite possible
             if(damier->plateau[ligne + 1][colonne + 1] == CASE_VIDE) {
-                pion = insererRafle(pion, creerRafle(ligne, colonne));
+                pionDeplacement = insererRafle(pionDeplacement, creerRafle(ligne, colonne));
                 deplacement = insererRafle(deplacement, creerRafle(ligne + 1, colonne + 1));
             } else if((damier->plateau[ligne + 1][colonne + 1] == PION_ROUGE) && verifierCaseValide(ligne + 2, colonne + 2) && damier->plateau[ligne + 2][colonne + 2] == CASE_VIDE) { // Selection des rafles des Pions rouges a droite
+                pionRafle = insererRafle(pionRafle, creerRafle(ligne, colonne));
                 rafle = insererRafle(rafle, creerRafle(ligne + 1, colonne + 1));
+                deplacementRafle = insererRafle(deplacementRafle, creerRafle(ligne + 2, colonne + 2));
             }
         }
     } else if((damier->plateau[ligne][colonne] == PION_ROUGE) && (couleurPion == PION_ROUGE)) { // Selection des pions Rouges
         if(verifierCaseValide(ligne - 1, colonne + 1)) { 
             if(damier->plateau[ligne - 1][colonne + 1] == CASE_VIDE) { // Deplacement a droite possible
-                pion = insererRafle(pion, creerRafle(ligne, colonne));
+                pionDeplacement = insererRafle(pionDeplacement, creerRafle(ligne, colonne));
                 deplacement = insererRafle(deplacement, creerRafle(ligne - 1, colonne + 1));
             } else if((damier->plateau[ligne - 1][colonne + 1] == PION_VERT) && verifierCaseValide(ligne - 2, colonne + 2) && damier->plateau[ligne - 2][colonne + 2] == CASE_VIDE) { // Selection des rafles des Pions verts a droite
+                pionRafle = insererRafle(pionRafle, creerRafle(ligne, colonne));
                 rafle = insererRafle(rafle, creerRafle(ligne - 1, colonne + 1));
+                deplacementRafle = insererRafle(deplacementRafle, creerRafle(ligne - 2, colonne + 2));
             }
         }
 
         if(verifierCaseValide(ligne - 1, colonne - 1)) { 
             if(damier->plateau[ligne - 1][colonne - 1] == CASE_VIDE) { // Deplacement a gauche possible
-                pion = insererRafle(pion, creerRafle(ligne, colonne));
+                pionDeplacement = insererRafle(pionDeplacement, creerRafle(ligne, colonne));
                 deplacement = insererRafle(deplacement, creerRafle(ligne - 1, colonne - 1));
             } else if((damier->plateau[ligne - 1][colonne - 1] == PION_VERT) && verifierCaseValide(ligne - 2, colonne - 2) && damier->plateau[ligne - 2][colonne - 2] == CASE_VIDE) { // Selection des rafles des Pions verts a gauche
+                pionRafle = insererRafle(pionRafle, creerRafle(ligne, colonne));
                 rafle = insererRafle(rafle, creerRafle(ligne - 1, colonne - 1));
+                deplacementRafle = insererRafle(deplacementRafle, creerRafle(ligne - 2, colonne - 2));
             }
         }
     }
     
-    return choix == 1 ? deplacement : choix == 2 ? rafle : choix == 3 ? pion : NULL;
+    return choix == 1 ? deplacement : choix == 2 ? rafle : choix == 3 ? pionDeplacement : choix == 4 ? pionRafle : choix == 5 ? deplacementRafle : NULL;
 }
 
 Rafle * trouverDeplacementsEtRaflesPossiblesDames(Damier *damier, int couleurPion, int choix) {

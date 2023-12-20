@@ -3,7 +3,7 @@
 
 
 int main(int argc, char* argv[]) {
-    int choix, option;
+    int choix, option = 1;
 
     Damier *damier = NULL;
     // Rafle *rafle = NULL, *t = NULL, *r = NULL, *deplacementsPossiblesPions = NULL, *initiale = NULL;
