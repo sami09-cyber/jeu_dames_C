@@ -3,6 +3,8 @@
 #include<string.h>
 #include <ctype.h>
 #include <time.h>
+#include <unistd.h>
+#include<dirent.h>
 
 /* Constantes representants l'etat d'une case et le type de joueur */ 
 #define CASE_VIDE 0
@@ -43,6 +45,7 @@ typedef struct JOUEUR {
     int type;
     int couleur;
     int tour;
+    int temps;
 } Joueur;
 
 /* Representation du damier: Le damier est le plateau contenant les pions */ 
@@ -68,3 +71,7 @@ Rafle * insererRafle(Rafle *rafle, Rafle *c);
 Rafle * supprimerRafle(Rafle *rafle, int position);
 
 int longueurRafle(Rafle *rafle);
+
+void afficherRafle(Rafle *rafle);
+
+void libererMemoire(Damier *damier, Rafle *rafle);
