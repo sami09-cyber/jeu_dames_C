@@ -40,4 +40,5 @@ N'hésitez pas à forker le dépôt et à soumettre des pull requests.
 ./assets/shot1.png
 ./assets/shot2.png
 
-<!-- ![démineur1](https://github.com/LIMAMMohamedlimam/Jeu-demineur/assets/136266543/a6a4ba07-b5b5-4058-a424-df00fe2125c2) -->
+![jeuDame](https://github.com/sami09-cyber/jeu_dames_C/blob/main/assets/shot1.png)
+![jeuDame](https://github.com/sami09-cyber/jeu_dames_C/blob/main/assets/shot2.png)
